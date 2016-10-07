@@ -16,12 +16,18 @@ public class Player
 	private String name;
 	//玩家手中的牌
 	private List<Card> cards;
+	//玩家手中最大的牌
+	private Card card;
 	
 	public Player()
 	{
 		
 	}
-	
+	/**
+	 * 有参构造方法
+	 * @param id	玩家ID
+	 * @param name	玩家姓名
+	 */
 	public Player(int id, String name)
 	{
 		this.id = id;
@@ -75,5 +81,13 @@ public class Player
 	public void setCards(List<Card> cards)
 	{
 		this.cards = cards;
+	}
+	public Card getCard()
+	{
+		return card;
+	}
+	public void setCard(Card card)
+	{
+		this.card = card;
 	}
 }

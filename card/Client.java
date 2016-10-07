@@ -63,18 +63,19 @@ public class Client
 	
 	public static void main(String[] args)
 	{
+		//创建纸牌服务对象
 		CardSevers cs = createCard();
-	
-		Player[] players = createPlayer(2);
-		//游戏开始，进行发牌
-		cs.dealCard(players, 2);
+		//创建玩家数组, 参数设置玩家个数
+		Player[] players = createPlayer(3);
+		//游戏开始，进行发牌，参数设置玩家可以拿到的纸牌数量
+		cs.dealCard(players, 3);
 		//获得所有玩家最大的牌
-		Player[] playerList = cs.compareCard(players);
+		Player maxPlayer = cs.compareCard(players);
 		//遍历所有玩家的最大牌
-		cs.traversalAllPlayerMaxCards(playerList);
+		cs.traversalAllPlayerMaxCards(players);
 		//遍历所有玩家的所持牌
 		cs.traversalAllPlayerCards(players);
 		
-		System.out.println("最后获胜的是：" + playerList[playerList.length-1].getName());
+		System.out.println("最后获胜的是：" + maxPlayer.getName());
 	}
 }

@@ -15,7 +15,11 @@ public class Card
 	{
 		
 	}
-	
+	/**
+	 * 有参构造方法
+	 * @param name	纸牌花色
+	 * @param value	纸牌点数
+	 */
 	public Card(String name, String value)
 	{
 		this.name = name;

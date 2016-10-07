@@ -14,24 +14,21 @@ public class CardSevers
 {
 	// 扑克牌集合
 	private List<Card> list;
-	// 存放纸牌的花色集合用于后面纸牌的比较
-	private List<String> cardBreed;
-	// 存放纸牌的点数集合用于后面纸牌的比较
+	// 存放纸牌的点数和花色集合用于后面纸牌的比较
 	private List<String> cardNumber;
 
 	// 按顺序生成扑克牌
 	public CardSevers()
 	{
 		this.list = new ArrayList<Card>();
-		this.cardBreed = new ArrayList<String>();
 		this.cardNumber = new ArrayList<String>();
 		// 纸牌的花色
 		String[] str1 = { "方块", "梅花", "红桃", "黑桃" };
-		this.cardBreed.addAll(Arrays.asList(str1));
+		this.cardNumber.addAll(Arrays.asList(str1));
 		// 纸牌的点数
 		String[] str2 = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
 		this.cardNumber.addAll(Arrays.asList(str2));
-
+		//生成一副扑克牌
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 13; j++)
@@ -82,47 +79,67 @@ public class CardSevers
 	 * 找出所有玩家所持最大的纸牌和所持最大纸牌的玩家
 	 * @param players
 	 */
-	public Player[] compareCard(Player[] players)
+	public Player compareCard(Player[] players)
 	{
-		Player[] playerList = new Player[players.length+1];
-		int i = 0;
+		//存放所持牌最大的玩家
+		Player maxPlayer = new Player();
+		//每个玩家的最大牌和所有玩家中最大的牌
 		Card maxCard, maxAllCard;
-		playerList[players.length] = new Player(players[0].getId(), players[0].getName());
+		//初始化最大牌和玩家
+		maxAllCard = players[0].getCards().get(0);
+		maxPlayer.setName(players[0].getName());
 		
 		//找出玩家所持最大的纸牌
 		for( Player player : players )
 		{
-			maxCard = maxAllCard = player.getCards().get(0);
-			
+			maxCard = player.getCards().get(0);
+			//找出玩家手中最大的牌
 			for( Card card : player.getCards() )
 			{
-				if( this.cardNumber.indexOf(maxCard.getValue()) < this.cardNumber.indexOf(card.getValue()) )
+				//比较点数，点数相同再比较花色
+				if( getNumber(card.getValue()) > getNumber(maxCard.getValue()) )
 				{
 					maxCard = card;
 				}
-				else if( this.cardBreed.indexOf(maxCard.getName()) < this.cardBreed.indexOf(card.getName()) )
+				else if( getNumber(card.getValue()) == getNumber(maxCard.getValue()))
 				{
-					maxCard = card;
+					if( getNumber(card.getName()) > getNumber(maxCard.getName()) )
+					{
+						maxCard = card;
+					}
 				}
 			}
 			
-			if(  this.cardNumber.indexOf(maxCard.getValue()) > this.cardNumber.indexOf(maxAllCard.getValue()) )
+			player.setCard(maxCard);
+			//比较点数，点数相同再比较花色， 找出所有玩家最大的牌
+			if( getNumber(maxCard.getValue()) > getNumber(maxAllCard.getValue()) )
 			{
-				if( this.cardBreed.indexOf(maxCard.getName()) > this.cardBreed.indexOf(maxAllCard.getName()) )
+				maxAllCard = maxCard;
+				maxPlayer.setName(player.getName());	
+			}
+			else if( getNumber(maxCard.getValue()) == getNumber(maxAllCard.getValue()) )
+			{
+				if( getNumber(maxCard.getName()) > getNumber(maxAllCard.getName()) )
 				{
 					maxAllCard = maxCard;
-					playerList[players.length].setId(player.getId());
-					playerList[players.length].setName(player.getName());
-					playerList[players.length].addCard(maxAllCard);
+					maxPlayer.setName(player.getName());	
 				}
 			}
-			
-			playerList[i] = new Player(player.getId(), player.getName());
-			playerList[i++].addCard(maxCard);
 		}
 		
-		return playerList;
+		return maxPlayer;
 	}
+	
+	/**
+	 * 获取比较的点数，通过扑克牌在集合的位置来比较大小
+	 * @param str 扑克牌属性
+	 * @return 点数
+	 */
+	public int getNumber(String str)
+	{
+		return this.cardNumber.indexOf(str);
+	}
+	
 	/**
 	 * 遍历所有玩家所持的纸牌
 	 * @param players
@@ -142,10 +159,10 @@ public class CardSevers
 	 */
 	public void traversalAllPlayerMaxCards(Player[] players)
 	{
-		for( int i = 0; i < players.length-1; i++ )
+		for( Player player : players )
 		{
-			System.out.print(players[i].getName() + "所持的最大纸牌：");
-			System.out.println(players[i].getCards().get(0).toString());
+			System.out.print(player.getName() + "所持的最大纸牌：");
+			System.out.println(player.getCard().toString());
 		}
 	}
 }
